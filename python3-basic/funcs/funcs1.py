@@ -35,7 +35,7 @@ def fa(l):
 #必须参数：不传报错
 #关键字参数：指定参数名传递 f(param=value)
 #默认参数：定义时给参数默认值 f(age=10)
-#不定长参数：*vartuple **vardict
+#不定长参数：*varTuple **varDict
 
 
 #不定长参数
@@ -72,9 +72,79 @@ def f5():
 def f5a(a, b, /, c, d, *, e, f):
     print(a, b, c, d, e, f) #1 2 3 4 5 6
 
+
+# 生成式
+def f6():
+    g=[x**2 for x in range(3)]
+    print(g) #[0, 1, 4]
+
+# 生成器
+def f7():
+    g=(x**2 for x in range(3))
+    for v in g:
+        print(v) #0 1 4
+
+# 自定义生成器
+def f8():
+    fg=fibonacci_generator(5)
+    for v in fg:
+        print(v)
+
+def fibonacci_generator(n):
+    a,b,count=0,1,0
+    while True:
+        if count>n:
+            return
+        # yield 返回一个值并暂停执行，在下一次调用生成器函数时从上次暂停的地方继续执行
+        yield a
+        a,b=b,a+b
+        count+=1
+        
+#自定义生成器2
+#通过使用 yield，我们可以实现惰性计算、按需生成值的功能，从而节省内存和提高效率。
+#生成器函数在迭代和处理大量数据时非常有用，尤其是当数据无法一次性放入内存时。
+def f9():
+    gen = my_generator()
+    print(next(gen))      #输出: 1
+    print(gen.send('Hello'))  #send给value，输出: 2
+    print(next(gen))      #输出: 3
+
+def my_generator():
+    value = yield 1 #生成器返回1，需要value
+    print('Received:', value) #输出: Received: Hello
+    yield 2
+    yield 3
+
+#自定义迭代器
+def f10():
+    myIter=MyIterator(1,3)
+    it=iter(myIter)
+    print(next(it)) # 1
+    print(next(it)) # 2
+    
+class MyIterator:
+    def __init__(self, start, end):
+        self.current = start
+        self.end = end
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current > self.end:
+            raise StopIteration
+        else:
+            value = self.current
+            self.current += 1
+            return value
+
 if __name__ == "__main__":
     # f1()
     # f2()
     # f3()
     # f4()
     # f5()
+    # f7()
+    # f8()
+    # f9()
+    f10()
